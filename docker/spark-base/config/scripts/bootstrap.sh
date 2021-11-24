@@ -7,7 +7,7 @@
 
 # Abaixo temos o trecho que rodará apenas no master.
 if [[ $HOSTNAME = spark-master ]]; then
-    
+
     # Formatamos o namenode
     hdfs namenode -format
 
@@ -44,21 +44,22 @@ if [[ $HOSTNAME = spark-master ]]; then
     GRANT ALL PRIVILEGES ON metastore.* TO 'hive'@'localhost' IDENTIFIED BY 'password'; \
     FLUSH PRIVILEGES; quit;"
 
-    # Caso mantenha notebooks personalizados na pasta que tem bind mount com o 
-    # container /user_data, o trecho abaixo automaticamente fará o processo de 
+    # Caso mantenha notebooks personalizados na pasta que tem bind mount com o
+    # container /user_data, o trecho abaixo automaticamente fará o processo de
     # confiar em todos os notebooks, também liberando o server do jupyter de
     # solicitar um token
     cd /user_data
     jupyter trust *.ipynb
     jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password='' &
 
-    # Iniciando o Kafka
-    cd /
-    ./usr/kafka/bin/kafka-server-start.sh ./usr/kafka/config/server.properties &
+    # # Iniciando o Kafka
+    # cd /
+    # ./usr/kafka/bin/kafka-server-start.sh ./usr/kafka/config/server.properties &
 
     # Inicio dos serviços do Hive. Nao recomendado: Redirecionamos
     # os outputs para uma localização inexistente para que as linhas
     # não bloqueiem o shell
+    cd /
     nohup hive --service metastore > /dev/null 2>&1 &
     nohup hive --service hiveserver2 > /dev/null 2>&1 &
 
@@ -68,19 +69,19 @@ else
     touch /var/lib/zookeeper/myid
     echo "$((${HOSTNAME: -1}+1))" >> /var/lib/zookeeper/myid
 
-    # Configs de Kafka. Vamos numerando os brokers.
-    sed -i 's/$/\n/' /usr/kafka/config/server.properties
-    echo "broker.id=$((${HOSTNAME: -1}+1))" >> /usr/kafka/config/server.properties
+    # # Configs de Kafka. Vamos numerando os brokers.
+    # sed -i 's/$/\n/' /usr/kafka/config/server.properties
+    # echo "broker.id=$((${HOSTNAME: -1}+1))" >> /usr/kafka/config/server.properties
 
     # Configs de HDFS nos dataNodes (workers)
     $HADOOP_HOME/sbin/hadoop-daemon.sh start datanode &
     $HADOOP_HOME/bin/yarn nodemanager &
-    
+
     # Inicio do serviço do Zookeeper
     ./usr/apache-zookeeper-3.6.1-bin/bin/zkServer.sh start &
 
-    # Início do Kafka
-    ./usr/kafka/bin/kafka-server-start.sh ./usr/kafka/config/server.properties
+    # # Início do Kafka
+    # ./usr/kafka/bin/kafka-server-start.sh ./usr/kafka/config/server.properties
 
 fi
 

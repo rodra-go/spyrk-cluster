@@ -1,12 +1,14 @@
 version: "3.7"
 services:
+
   spark-master:
-    image: gbieul/spark-master-hadoop:2.4.6
+    image: rodrago/spark-master-hadoop:2.4.6
     container_name: spark-master
     hostname: spark-master
     tty: true
     volumes:
       - ./user_data:/user_data
+
     ports:
       - "8088:8088" # ResourceManager
       - "11070:50070" # NameNode WebUI
@@ -15,17 +17,19 @@ services:
       - "8042:8042" # NodeManager
       - "8888:8888" # Jupyter
       - "4040:4040" # Spark
+      - "7077:7077" # Spark Master
       - "11000:10000" # HiveServer2 - Binary Mode
       - "11001:10001" # HiveServer - HTTP Mode
       - "11002:10002" # Hiveserver WebUI
       - "9092:9092" # Kafka
-    networks: 
+    networks:
       spark-network:
         ipv4_address: 10.5.0.2
     environment:
       - "SPARK_LOCAL_IP=spark-master"
+
   spark-worker-1:
-    image: gbieul/spark-worker-hadoop:2.4.6
+    image: rodrago/spark-worker-hadoop:2.4.6
     container_name: spark-worker-1
     hostname: spark-worker-1
     tty: true
@@ -36,11 +40,12 @@ services:
       - "6042:8042" # NodeManager
     environment:
       - "SPARK_LOCAL_IP=spark-worker-1"
-    networks: 
+    networks:
       spark-network:
         ipv4_address: 10.5.0.3
+
   spark-worker-2:
-    image: gbieul/spark-worker-hadoop:2.4.6
+    image: rodrago/spark-worker-hadoop:2.4.6
     container_name: spark-worker-2
     hostname: spark-worker-2
     tty: true
@@ -51,9 +56,25 @@ services:
       - "7042:8042" # NodeManager
     environment:
       - "SPARK_LOCAL_IP=spark-worker-2"
-    networks: 
+    networks:
       spark-network:
         ipv4_address: 10.5.0.4
+
+volumes:
+  spark-master-dfs:
+    name: "spark-master-dfs"
+  spark-worker-1-dfs:
+    name: "spark-worker-1-dfs"
+  spark-worker-2-dfs:
+    name: "spark-worker-2-dfs"
+  spark-master-yarn:
+    name: "spark-master-yarn"
+  spark-worker-1-yarn:
+    name: "spark-worker-1-yarn"
+  spark-worker-2-yarn:
+    name: "spark-worker-2-yarn"
+
+
 networks:
   spark-network:
     driver: bridge

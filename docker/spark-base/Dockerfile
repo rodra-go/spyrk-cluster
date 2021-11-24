@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk-slim
+FROM rodrago/rapids-openjdk
 
 # Variaveis de ambiente do Hadoop
 ENV HADOOP_VERSION 2.7.3
@@ -29,7 +29,7 @@ ENV KAFKA_HOME=/usr/kafka
 ENV CLASSPATH=$HIVE_HOME/lib:$SCALA_HOME/lib:$KAFKA_HOME/lib
 
 # Variaveis de ambiente do Spark
-ENV SPARK_VERSION 2.4.6
+ENV SPARK_VERSION 3.0.0
 ENV SPARK_HOME /usr/spark-${SPARK_VERSION}
 ENV SPARK_DIST_CLASSPATH="$HADOOP_HOME/etc/hadoop/*:$HADOOP_HOME/share/hadoop/common/lib/*:$HADOOP_HOME/share/hadoop/common/*:$HADOOP_HOME/share/hadoop/hdfs/*:$HADOOP_HOME/share/hadoop/hdfs/lib/*:$HADOOP_HOME/share/hadoop/hdfs/*:$HADOOP_HOME/share/hadoop/yarn/lib/*:$HADOOP_HOME/share/hadoop/yarn/*:$HADOOP_HOME/share/hadoop/mapreduce/lib/*:$HADOOP_HOME/share/hadoop/mapreduce/*:$HADOOP_HOME/share/hadoop/tools/lib/*"
 
@@ -48,10 +48,12 @@ ENV PATH $PATH:$JAVA_HOME/bin:$HADOOP_HOME/bin:$SPARK_HOME/bin:$SPARK_HOME/pytho
 
 COPY /config/jupyter/requirements.txt /
 
+WORKDIR /
+
 # Ajustes e instalação dos componentes do cluster
-RUN apt-get update \
+RUN source activate rapids && \
+    apt-get update \
     && apt-get install -y wget vim ssh openssh-server curl iputils-ping \
-    python3 python3-pip python3-dev \
     build-essential libssl-dev libffi-dev libpq-dev mariadb-server libmariadb-java \
     && python3 -m pip install -r requirements.txt \
     && python3 -m pip install dask[bag] --upgrade \
@@ -128,8 +130,8 @@ EXPOSE 9000 4040 8020 22 9083 10000 10001 10002 2181 2888 3888 9092 9999
 
 # Algumas configuracoes adicionais e inicio de alguns servicoes que devem ser feitos em
 # tempo de execucao estao presentes no script bootstrap.
-# Este cuidará de colocar alguns datasets exemplo dentro do HDFS, bem como de iniciar 
-# servicos como HDFS (formatando Namenode), iniciando o Hive, definindo o ID do 
+# Este cuidará de colocar alguns datasets exemplo dentro do HDFS, bem como de iniciar
+# servicos como HDFS (formatando Namenode), iniciando o Hive, definindo o ID do
 # Zookeeper para que suas diferentes instâncias possam se ver e iniciando este servico.
 # O comando ENTRYPOINT define que este script será executado quando os containeres
 # iniciarem.
