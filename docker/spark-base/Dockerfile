@@ -124,6 +124,9 @@ COPY config/scripts /
 COPY config/zookeeper ${ZOOKEEPER_HOME}/conf/
 COPY config/kafka ${KAFKA_HOME}/config
 
+
+COPY config/spark/delta-core_2.12-0.8.0.jar ${SPARK_HOME}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_MINOR_VERSION}/jars/
+
 # Portas 10000:10002 relativas ao Hiveserver2
 # Portas 2181 2888 e 3888 relativas ao Zookeper, 9092 ao Kafka, 9999 webui do Hiveserver
 EXPOSE 9000 4040 8020 22 9083 10000 10001 10002 2181 2888 3888 9092 9999

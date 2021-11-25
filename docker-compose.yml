@@ -8,6 +8,8 @@ services:
     tty: true
     volumes:
       - ./user_data:/user_data
+      - spark-master-data:/usr/hadoop-2.7.3/data
+      - spark-master-logs:/usr/hadoop-2.7.3/logs
 
     ports:
       - "8088:8088" # ResourceManager
@@ -43,6 +45,9 @@ services:
     networks:
       spark-network:
         ipv4_address: 10.5.0.3
+    volumes:
+      - spark-worker-1-data:/usr/hadoop-2.7.3/data
+      - spark-worker-1-logs:/usr/hadoop-2.7.3/logs
 
   spark-worker-2:
     image: rodrago/spark-worker-hadoop:2.4.6
@@ -59,20 +64,23 @@ services:
     networks:
       spark-network:
         ipv4_address: 10.5.0.4
+    volumes:
+      - spark-worker-2-data:/usr/hadoop-2.7.3/data
+      - spark-worker-2-logs:/usr/hadoop-2.7.3/logs
 
 volumes:
-  spark-master-dfs:
-    name: "spark-master-dfs"
-  spark-worker-1-dfs:
-    name: "spark-worker-1-dfs"
-  spark-worker-2-dfs:
-    name: "spark-worker-2-dfs"
-  spark-master-yarn:
-    name: "spark-master-yarn"
-  spark-worker-1-yarn:
-    name: "spark-worker-1-yarn"
-  spark-worker-2-yarn:
-    name: "spark-worker-2-yarn"
+  spark-master-data:
+    name: "spark-master-data"
+  spark-worker-1-data:
+    name: "spark-worker-1-data"
+  spark-worker-2-data:
+    name: "spark-worker-2-data"
+  spark-master-logs:
+    name: "spark-master-logs"
+  spark-worker-1-logs:
+    name: "spark-worker-1-logs"
+  spark-worker-2-logs:
+    name: "spark-worker-2-logs"
 
 
 networks:
