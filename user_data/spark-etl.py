@@ -29,7 +29,7 @@ schema = StructType([ StructField(pd_df.columns[0], TimestampType(), True)\
 
 df = spark.createDataFrame(data=pd_df, schema=schema)
 
-df.write.format("delta").mode("overwrite").save("hdfs://spark-master:9000/datasets/events.parquet")  # noqa: F841
+df.write.format("delta").mode("overwrite").save("hdfs://spark-master:9000/datasets/events")  # noqa: F841
 
 df.show()
 
