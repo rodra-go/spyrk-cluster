@@ -118,7 +118,7 @@ RUN chmod 600 /root/.ssh/config
 
 # Todos os arquivos de configuracao que devem ser copiados para dentro do
 # container estao aqui
-COPY config/spark ${SPARK_HOME}/conf/
+COPY config/spark ${SPARK_HOME}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_MINOR_VERSION}/conf/
 COPY config/hadoop/*.xml /usr/hadoop-${HADOOP_VERSION}/etc/hadoop/
 COPY config/scripts /
 COPY config/zookeeper ${ZOOKEEPER_HOME}/conf/
