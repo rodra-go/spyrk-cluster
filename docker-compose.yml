@@ -24,7 +24,7 @@ services:
       - "11001:10001" # HiveServer - HTTP Mode
       - "11002:10002" # Hiveserver WebUI
       - "9092:9092" # Kafka
-      - "9000":"9000" # Default FS
+      - "9000:9000" # Default FS
     networks:
       spark-network:
         ipv4_address: 10.5.0.2
