@@ -7,7 +7,7 @@
         </property>
         <property>
                 <name>yarn.resourcemanager.hostname</name>
-                <value>0.0.0.0</value>
+                <value>spark-master</value>
         </property>
         <property>
                 <name>yarn.nodemanager.aux-services</name>
