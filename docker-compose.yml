@@ -45,7 +45,7 @@ services:
       - "SPARK_LOCAL_IP=spark-worker-1"
     networks:
       spark-network:
-        ipv4_address: 10.5.0.4
+        ipv4_address: 10.5.0.3
     volumes:
       - spark-worker-1-data:/usr/hadoop-2.7.3/data
       - spark-worker-1-logs:/usr/hadoop-2.7.3/logs
@@ -64,7 +64,7 @@ services:
       - "SPARK_LOCAL_IP=spark-worker-2"
     networks:
       spark-network:
-        ipv4_address: 10.5.0.5
+        ipv4_address: 10.5.0.4
     volumes:
       - spark-worker-2-data:/usr/hadoop-2.7.3/data
       - spark-worker-2-logs:/usr/hadoop-2.7.3/logs
@@ -85,11 +85,14 @@ volumes:
 
 
 networks:
-#   spark-network:
-#     external: true
-#     name: my-attachable-overlay
   spark-network:
-    driver: overlay
+    driver: bridge
     ipam:
-      config:
-        - subnet: 10.5.0.0/16
+     driver: default
+     config:
+       - subnet: 10.5.0.0/16
+  # spark-network:
+  # driver: overlay
+  #   ipam:
+  #     config:
+  #       - subnet: 10.5.0.0/16
