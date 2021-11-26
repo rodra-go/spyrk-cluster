@@ -45,7 +45,7 @@ services:
       - "SPARK_LOCAL_IP=spark-worker-1"
     networks:
       spark-network:
-        ipv4_address: 10.5.0.3
+        ipv4_address: 10.5.0.4
     volumes:
       - spark-worker-1-data:/usr/hadoop-2.7.3/data
       - spark-worker-1-logs:/usr/hadoop-2.7.3/logs
@@ -64,7 +64,7 @@ services:
       - "SPARK_LOCAL_IP=spark-worker-2"
     networks:
       spark-network:
-        ipv4_address: 10.5.0.4
+        ipv4_address: 10.5.0.5
     volumes:
       - spark-worker-2-data:/usr/hadoop-2.7.3/data
       - spark-worker-2-logs:/usr/hadoop-2.7.3/logs
