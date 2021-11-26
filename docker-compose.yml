@@ -85,9 +85,11 @@ volumes:
 
 
 networks:
+#   spark-network:
+#     external: true
+#     name: my-attachable-overlay
   spark-network:
-    driver: bridge
+    driver: overlay
     ipam:
-     driver: default
-     config:
-       - subnet: 10.5.0.0/16
+      config:
+        - subnet: 10.5.0.0/16
